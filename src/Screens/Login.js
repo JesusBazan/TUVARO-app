@@ -4,8 +4,11 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 const Login = ({navigation}) => {
     return(
         <View style={styles.generalContainer}>
-            <TouchableOpacity onPress={() => {navigation.navigate("Home")}}>
+            <TouchableOpacity onPress={() => {navigation.navigate("HomeTab")}}>
                 <Text>LOGIN</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {navigation.navigate("Register")}}>
+                <Text>REGISTRO</Text>
             </TouchableOpacity>
         </View>
     );
