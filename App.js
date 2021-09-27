@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-//COMPONENTS
+//COMPONENTSs
 import StackLogin from './src/Navigation/StackLogin';
 import Tabs from './src/Navigation/Tabs';
 
