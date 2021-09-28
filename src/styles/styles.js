@@ -9,5 +9,7 @@ const colors = {
   GRAY_3_COLOR: "#8C8C8C",
   GRAY_4_COLOR: "#595959",
   GRAY_5_COLOR: "#404040",
+
+  GREEN_1_COLOR: "#1BD173",
 };
 export { colors };

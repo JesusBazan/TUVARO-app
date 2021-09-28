@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     width: "80%",
     marginBottom: 15,
     backgroundColor: colors.GRAY_1_COLOR,
-    borderRadius: 5,
+    borderRadius: 10,
     paddingLeft: 10,
   },
   textLabel: {
@@ -103,10 +103,10 @@ const styles = StyleSheet.create({
   btnSignIn: {
     width: "80%",
     height: 40,
-    backgroundColor: "#1BD173",
+    backgroundColor: colors.GREEN_1_COLOR,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 5,
+    borderRadius: 10,
     marginVertical: 20,
   },
 });
