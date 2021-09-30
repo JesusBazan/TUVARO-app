@@ -13,13 +13,26 @@ import { colors } from "../styles/styles";
 const { height, width } = Dimensions.get("window");
 const { currentHeight } = StatusBar;
 import { Feather } from "@expo/vector-icons";
+import { Auth } from "aws-amplify";
 
-function ConfirmCode({ navigation }) {
+function ConfirmCode({ navigation, route }) {
   const digit0 = useRef();
   const digit1 = useRef();
   const digit2 = useRef();
   const digit3 = useRef();
   const digit4 = useRef();
+  const digit5 = useRef();
+
+  async function confirmarCodigo(){
+    try {
+      let codigo = digit0.current +""+ digit1.current +""+ digit2.current +""+ digit3.current +""+ digit4.current;
+      console.log("CONFIRMAR ---> ",codigo,route.params.email);
+      const data = await Auth.confirmSignUp(route.params.email,codigo)
+      navigation.navigate("Login");
+    } catch (error) {
+      console.log("ERROR AL CONFIRMAR CODIGO ---> ",error);
+    }
+  }
 
   return (
     <View style={styles.generalContainer}>
@@ -57,6 +70,7 @@ function ConfirmCode({ navigation }) {
             placeholder={"0"}
             keyboardType="numeric"
             maxLength={1}
+            value={digit0.current}
             ref={digit0}
             onChangeText={(text) => {
               text.length > 0 ? digit1.current.focus() : null;
@@ -67,6 +81,7 @@ function ConfirmCode({ navigation }) {
             placeholder={"0"}
             keyboardType="numeric"
             maxLength={1}
+            value={digit1.current}
             ref={digit1}
             onChangeText={(text) => {
               text.length > 0 ? digit2.current.focus() : digit0.current.focus();
@@ -78,6 +93,7 @@ function ConfirmCode({ navigation }) {
             keyboardType="numeric"
             maxLength={1}
             ref={digit2}
+            value={digit2.current}
             onChangeText={(text) => {
               text.length > 0 ? digit3.current.focus() : digit1.current.focus();
             }}
@@ -88,6 +104,7 @@ function ConfirmCode({ navigation }) {
             keyboardType="numeric"
             maxLength={1}
             ref={digit3}
+            value={digit3.current}
             onChangeText={(text) => {
               text.length > 0 ? digit4.current.focus() : digit2.current.focus();
             }}
@@ -98,15 +115,27 @@ function ConfirmCode({ navigation }) {
             keyboardType="numeric"
             maxLength={1}
             ref={digit4}
+            value={digit4.current}
             onChangeText={(text) => {
               text.length > 0 ? null : digit3.current.focus();
+            }}
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder={"0"}
+            keyboardType="numeric"
+            maxLength={1}
+            ref={digit5}
+            value={digit5.current}
+            onChangeText={(text) => {
+              text.length > 0 ? null : digit4.current.focus();
             }}
           />
         </View>
         <TouchableOpacity
           style={styles.btnSignUp}
           onPress={() => {
-            navigation.navigate("Login");
+            confirmarCodigo();
           }}
         >
           <Text style={[styles.textLabel, { color: colors.WHITE_COLOR }]}>

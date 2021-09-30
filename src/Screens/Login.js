@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,7 +13,36 @@ import { colors } from "../styles/styles";
 const { height, width } = Dimensions.get("window");
 const { currentHeight } = StatusBar;
 
+import { Auth } from "aws-amplify";
+
 const Login = ({ navigation }) => {
+
+  const [emailState,setEmailState] = useState("");
+  const [passwordState,setPasswordState] = useState("");
+
+  const emailRef = useRef("");
+  const passwordRef = useRef("");
+
+  function onChangeTextEmail(value){
+    setEmailState(value);
+    emailRef.current = value;
+  }
+
+  function onChangeTextPassword(value){
+    setPasswordState(value);
+    passwordRef.current = value;
+  }
+
+  async function IniciarSesion() {
+    try {
+      const user = await Auth.signIn(emailRef.current,passwordRef.current);
+      console.log("USUARIO ---> ",user);
+      navigation.navigate("HomeTab");
+    } catch (error) {
+      console.log("ERROR AL INICIAR SESION ---> ",error);
+    }
+  }
+
   return (
     <View style={styles.generalContainer}>
       <View style={styles.formContainer}>
@@ -27,7 +56,7 @@ const Login = ({ navigation }) => {
         </Text>
         <View style={styles.inputContainer}>
           <Text style={styles.textLabel}>Email</Text>
-          <TextInput style={styles.textInput} placeholder={"test@gmail.com"} />
+          <TextInput style={styles.textInput} placeholder={"test@gmail.com"} value={emailState} onChangeText={(val) => {onChangeTextEmail(val)}}/>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.textLabel}>Contraseña</Text>
@@ -35,12 +64,14 @@ const Login = ({ navigation }) => {
             style={styles.textInput}
             placeholder={"* * * * * * * *"}
             secureTextEntry={true}
+            value={passwordState}
+            onChangeText={(val) => {onChangeTextPassword(val)}}
           />
         </View>
         <TouchableOpacity
           style={styles.btnSignIn}
           onPress={() => {
-            navigation.navigate("HomeTab");
+            IniciarSesion();
           }}
         >
           <Text style={[styles.textLabel, { color: colors.WHITE_COLOR }]}>

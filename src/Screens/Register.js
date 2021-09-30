@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState,useRef} from "react";
 import {
   StyleSheet,
   Text,
@@ -7,14 +7,49 @@ import {
   StatusBar,
   Dimensions,
   TextInput,
-  ScrollView,
+  Alert,
 } from "react-native";
 import { colors } from "../styles/styles";
 const { height, width } = Dimensions.get("window");
 const { currentHeight } = StatusBar;
 import { Feather } from "@expo/vector-icons";
 
+// ^ ------------------------------- AWS IMPORTS ------------------------------ */
+import { Auth } from "aws-amplify";
+
 const Register = ({ navigation }) => {
+
+  const [emailState,setEmailState] = useState("");
+  const [passwordState,setPasswordState] = useState("");
+
+  const emailRef = useRef("");
+  const passwordRef = useRef("");
+
+  function onChangeTextEmail(value){
+    setEmailState(value);
+    emailRef.current = value;
+  }
+
+  function onChangeTextPassword(value){
+    setPasswordState(value);
+    passwordRef.current = value;
+  }
+
+  async function registrarUser(){
+    try {
+      console.log();
+      const user = await Auth.signUp({
+        username: emailRef.current,
+        password: passwordRef.current
+      });
+      console.log("USUARIO ---> ",user);
+      navigation.navigate("ConfirmCode",{email: emailRef.current});
+    } catch (error) {
+      console.log("ERROR AL REGISTRAR USUARIO ---> ",error);
+      Alert.alert(error);
+    }
+  }
+
   return (
     <View style={styles.generalContainer}>
       <View
@@ -44,7 +79,7 @@ const Register = ({ navigation }) => {
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
           <Text style={styles.textLabel}>Usuario</Text>
-          <TextInput style={styles.textInput} placeholder={"test@gmail.com"} />
+          <TextInput style={styles.textInput} placeholder={"test@gmail.com"} value={emailState} onChangeText={(val) => {onChangeTextEmail(val)}}/>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.textLabel}>Email</Text>
@@ -56,6 +91,8 @@ const Register = ({ navigation }) => {
             style={styles.textInput}
             placeholder={"* * * * * * * *"}
             secureTextEntry={true}
+            value={passwordState}
+            onChangeText={(val) => {onChangeTextPassword(val)}}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -69,7 +106,7 @@ const Register = ({ navigation }) => {
         <TouchableOpacity
           style={styles.btnSignUp}
           onPress={() => {
-            navigation.navigate("ConfirmCode");
+            registrarUser();
           }}
         >
           <Text style={[styles.textLabel, { color: colors.WHITE_COLOR }]}>

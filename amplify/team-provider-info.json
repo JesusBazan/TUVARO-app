@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-tuvaroapp-dev-174601-authRole",
+      "UnauthRoleArn": "arn:aws:iam::584029414410:role/amplify-tuvaroapp-dev-174601-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::584029414410:role/amplify-tuvaroapp-dev-174601-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-tuvaroapp-dev-174601-deployment",
+      "UnauthRoleName": "amplify-tuvaroapp-dev-174601-unauthRole",
+      "StackName": "amplify-tuvaroapp-dev-174601",
+      "StackId": "arn:aws:cloudformation:us-east-2:584029414410:stack/amplify-tuvaroapp-dev-174601/076ea7c0-2177-11ec-b23b-06dfa8d140bc",
+      "AmplifyAppId": "d38r1fb5x5zja6"
+    },
+    "categories": {
+      "auth": {
+        "tuvaroapp98456ce4": {}
+      }
+    }
+  }
+}
