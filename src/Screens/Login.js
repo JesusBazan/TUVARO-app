@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "react-native";
 import { colors } from "../styles/styles";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 
 const { height, width } = Dimensions.get("window");
 const { currentHeight } = StatusBar;
@@ -17,6 +18,7 @@ import { Auth } from "aws-amplify";
 
 const Login = ({ navigation }) => {
 
+  const [errorInput,setErrorInput] = useState(true);
   const [emailState,setEmailState] = useState("");
   const [passwordState,setPasswordState] = useState("");
 
@@ -54,19 +56,27 @@ const Login = ({ navigation }) => {
         >
           TUVARO
         </Text>
-        <View style={styles.inputContainer}>
+        <View style={errorInput ? styles.inputContainerError : styles.inputContainer}>
           <Text style={styles.textLabel}>Email</Text>
-          <TextInput style={styles.textInput} placeholder={"test@gmail.com"} value={emailState} onChangeText={(val) => {onChangeTextEmail(val)}}/>
+          <View style={{width: "90%", flexDirection: "row"}}>
+            <TextInput style={styles.textInput} placeholder={"test@gmail.com"} value={emailState} onChangeText={(val) => {onChangeTextEmail(val)}}/>
+            <Feather name="alert-circle" size={15} color="red" />
+          </View>
+          <Text style={styles.textLabelError}>introduce un correo valido</Text>
         </View>
-        <View style={styles.inputContainer}>
+        <View style={errorInput ? styles.inputContainerError : styles.inputContainer}>
           <Text style={styles.textLabel}>Contraseña</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder={"* * * * * * * *"}
-            secureTextEntry={true}
-            value={passwordState}
-            onChangeText={(val) => {onChangeTextPassword(val)}}
-          />
+          <View style={{width: "90%", flexDirection: "row"}}>
+            <TextInput
+              style={styles.textInput}
+              placeholder={"* * * * * * * *"}
+              secureTextEntry={true}
+              value={passwordState}
+              onChangeText={(val) => {onChangeTextPassword(val)}}
+            />
+            <Feather name="alert-circle" size={15} color="red" />
+          </View>
+          <Text style={styles.textLabelError}>contraseña incorrecta</Text>
         </View>
         <TouchableOpacity
           style={styles.btnSignIn}
@@ -128,6 +138,10 @@ const styles = StyleSheet.create({
     color: colors.GRAY_5_COLOR,
     fontSize: 14,
   },
+  textLabelError: {
+    color: "red",
+    fontSize: 10,
+  },
   textInput: {
     width: "100%",
   },
@@ -139,5 +153,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     marginVertical: 20,
+  },
+  inputContainerError: {
+    width: "80%",
+    marginBottom: 15,
+    backgroundColor: colors.GRAY_1_COLOR,
+    borderRadius: 10,
+    paddingLeft: 10,
+    borderColor: "red",
+    borderWidth: 2
   },
 });
