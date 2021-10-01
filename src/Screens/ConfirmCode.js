@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,7 +15,17 @@ const { currentHeight } = StatusBar;
 import { Feather } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
 
+const Code = {
+  1: "",
+  2: "",
+  3: "",
+  4: "",
+  5: "",
+  6: "",
+};
+
 function ConfirmCode({ navigation, route }) {
+  const [code, setCode] = useState(Code);
   const digit0 = useRef();
   const digit1 = useRef();
   const digit2 = useRef();
@@ -23,14 +33,22 @@ function ConfirmCode({ navigation, route }) {
   const digit4 = useRef();
   const digit5 = useRef();
 
-  async function confirmarCodigo(){
+  const setInput = (key, value) => {
+    setCode({ ...code, [key]: value });
+  };
+
+  async function confirmarCodigo() {
     try {
-      let codigo = digit0.current +""+ digit1.current +""+ digit2.current +""+ digit3.current +""+ digit4.current;
-      console.log("CONFIRMAR ---> ",codigo,route.params.email);
-      const data = await Auth.confirmSignUp(route.params.email,codigo)
+      let text = { ...code };
+
+      let codeToSend =
+        text[1] + text[2] + text[3] + text[4] + text[5] + text[6];
+
+      console.log("CONFIRMAR ---> ", codeToSend, route.params.email);
+      const data = await Auth.confirmSignUp(route.params.email, codeToSend);
       navigation.navigate("Login");
     } catch (error) {
-      console.log("ERROR AL CONFIRMAR CODIGO ---> ",error);
+      console.log("ERROR AL CONFIRMAR CODIGO ---> ", error);
     }
   }
 
@@ -61,8 +79,13 @@ function ConfirmCode({ navigation, route }) {
         </Text>
       </View>
       <View style={styles.formContainer}>
-        <Text style={[styles.textLabel, { marginBottom: 10 }]}>
-          Ingresa los 5 digitos enviados al test@gmail.com
+        <Text
+          style={[
+            styles.textLabel,
+            { marginBottom: 10, textAlign: "center", color: colors.BLUE_COLOR },
+          ]}
+        >
+          Ingresa los 5 digitos enviados al {route.params.email}
         </Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -70,10 +93,12 @@ function ConfirmCode({ navigation, route }) {
             placeholder={"0"}
             keyboardType="numeric"
             maxLength={1}
-            value={digit0.current}
             ref={digit0}
             onChangeText={(text) => {
-              text.length > 0 ? digit1.current.focus() : null;
+              if (text.length > 0) {
+                digit1.current.focus();
+              }
+              setInput("1", text);
             }}
           />
           <TextInput
@@ -81,10 +106,14 @@ function ConfirmCode({ navigation, route }) {
             placeholder={"0"}
             keyboardType="numeric"
             maxLength={1}
-            value={digit1.current}
             ref={digit1}
             onChangeText={(text) => {
-              text.length > 0 ? digit2.current.focus() : digit0.current.focus();
+              if (text.length > 0) {
+                digit2.current.focus();
+              } else {
+                digit0.current.focus();
+              }
+              setInput("2", text);
             }}
           />
           <TextInput
@@ -93,9 +122,13 @@ function ConfirmCode({ navigation, route }) {
             keyboardType="numeric"
             maxLength={1}
             ref={digit2}
-            value={digit2.current}
             onChangeText={(text) => {
-              text.length > 0 ? digit3.current.focus() : digit1.current.focus();
+              if (text.length > 0) {
+                digit3.current.focus();
+              } else {
+                digit1.current.focus();
+              }
+              setInput("3", text);
             }}
           />
           <TextInput
@@ -104,9 +137,13 @@ function ConfirmCode({ navigation, route }) {
             keyboardType="numeric"
             maxLength={1}
             ref={digit3}
-            value={digit3.current}
             onChangeText={(text) => {
-              text.length > 0 ? digit4.current.focus() : digit2.current.focus();
+              if (text.length > 0) {
+                digit4.current.focus();
+              } else {
+                digit2.current.focus();
+              }
+              setInput("4", text);
             }}
           />
           <TextInput
@@ -115,9 +152,13 @@ function ConfirmCode({ navigation, route }) {
             keyboardType="numeric"
             maxLength={1}
             ref={digit4}
-            value={digit4.current}
             onChangeText={(text) => {
-              text.length > 0 ? null : digit3.current.focus();
+              if (text.length > 0) {
+                digit5.current.focus();
+              } else {
+                digit3.current.focus();
+              }
+              setInput("5", text);
             }}
           />
           <TextInput
@@ -126,9 +167,11 @@ function ConfirmCode({ navigation, route }) {
             keyboardType="numeric"
             maxLength={1}
             ref={digit5}
-            value={digit5.current}
             onChangeText={(text) => {
-              text.length > 0 ? null : digit4.current.focus();
+              if (text.length <= 0) {
+                digit4.current.focus();
+              }
+              setInput("6", text);
             }}
           />
         </View>
