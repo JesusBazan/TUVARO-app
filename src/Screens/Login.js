@@ -18,30 +18,82 @@ import { Auth } from "aws-amplify";
 
 const Login = ({ navigation }) => {
 
-  const [errorInput,setErrorInput] = useState(true);
+  const [errorInputEmail,setErrorInputEmail] = useState(false);
+  const [erroInputPassword,setErroInputPassword] = useState(false);
   const [emailState,setEmailState] = useState("");
   const [passwordState,setPasswordState] = useState("");
+  const [mensajeErrorEmail,setMensajeErrorEmail] = useState("introduce un correo valido");
+  const [mensajeErrorPassword,setMensajeErrorPassword] = useState("contraseña incorrecta");
 
   const emailRef = useRef("");
   const passwordRef = useRef("");
 
   function onChangeTextEmail(value){
+    setErrorInputEmail(false);
     setEmailState(value);
     emailRef.current = value;
   }
 
   function onChangeTextPassword(value){
+    setErroInputPassword(false);
     setPasswordState(value);
     passwordRef.current = value;
   }
 
   async function IniciarSesion() {
     try {
-      const user = await Auth.signIn(emailRef.current,passwordRef.current);
-      console.log("USUARIO ---> ",user);
-      navigation.navigate("HomeTab");
+      setErrorInputEmail(false);
+      setErroInputPassword(false);
+      console.log("CREDENCIALES ---> ",emailRef.current," ",passwordRef.current);
+      if(emailRef.current && passwordRef.current){
+        const user = await Auth.signIn(emailRef.current,passwordRef.current);
+        console.log("USUARIO ---> ",user);
+        navigation.navigate("HomeTab");
+      }
+      else{
+        setErrorInputEmail(true);
+        setErroInputPassword(true);
+        setMensajeErrorEmail("introduce un correo valido");
+        setMensajeErrorPassword("introduce una contraseña valida");
+      }
+      
     } catch (error) {
       console.log("ERROR AL INICIAR SESION ---> ",error);
+      if(error.code === "UserNotFoundException"){
+        switch (error.message) {
+
+          
+
+          case "User does not exist.":
+            setErrorInputEmail(true);
+            setMensajeErrorEmail("el correo no esta registrado");
+            break;
+
+          default:
+            setErroInputPassword(true);
+            setErrorInputEmail(true);
+            break;
+        }
+      }
+      else if(error.code === "NotAuthorizedException"){
+
+        switch (error.message) {
+
+          case "Incorrect username or password.":
+            setErroInputPassword(true);
+            setErrorInputEmail(true);
+            setMensajeErrorEmail("correo o contraseña incorrectos");
+            setMensajeErrorPassword("correo o contraseña incorrectos");
+            break;
+        
+          default:
+            setErroInputPassword(true);
+            setErrorInputEmail(true);
+            setMensajeErrorEmail("introduce un correo valido");
+            setMensajeErrorPassword("introduce una contraseña valida");
+            break;
+        }
+      }
     }
   }
 
@@ -56,15 +108,25 @@ const Login = ({ navigation }) => {
         >
           TUVARO
         </Text>
-        <View style={errorInput ? styles.inputContainerError : styles.inputContainer}>
+        <View style={errorInputEmail ? styles.inputContainerError : styles.inputContainer}>
           <Text style={styles.textLabel}>Email</Text>
           <View style={{width: "90%", flexDirection: "row"}}>
             <TextInput style={styles.textInput} placeholder={"test@gmail.com"} value={emailState} onChangeText={(val) => {onChangeTextEmail(val)}}/>
-            <Feather name="alert-circle" size={15} color="red" />
+            {
+              errorInputEmail ? 
+              <Feather name="alert-circle" size={15} color="red" />
+              : 
+              null
+            }
           </View>
-          <Text style={styles.textLabelError}>introduce un correo valido</Text>
+          {
+            errorInputEmail ? 
+            <Text style={styles.textLabelError}>{mensajeErrorEmail}</Text>
+            : 
+            null
+          }
         </View>
-        <View style={errorInput ? styles.inputContainerError : styles.inputContainer}>
+        <View style={erroInputPassword ? styles.inputContainerError : styles.inputContainer}>
           <Text style={styles.textLabel}>Contraseña</Text>
           <View style={{width: "90%", flexDirection: "row"}}>
             <TextInput
@@ -74,9 +136,19 @@ const Login = ({ navigation }) => {
               value={passwordState}
               onChangeText={(val) => {onChangeTextPassword(val)}}
             />
-            <Feather name="alert-circle" size={15} color="red" />
+            {
+              erroInputPassword ? 
+              <Feather name="alert-circle" size={15} color="red" />
+              : 
+              null
+            }
           </View>
-          <Text style={styles.textLabelError}>contraseña incorrecta</Text>
+          {
+            erroInputPassword ? 
+            <Text style={styles.textLabelError}>{mensajeErrorPassword}</Text>
+            : 
+            null
+          }
         </View>
         <TouchableOpacity
           style={styles.btnSignIn}
