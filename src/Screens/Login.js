@@ -7,6 +7,7 @@ import {
   Dimensions,
   StatusBar,
   TextInput,
+  Image
 } from "react-native";
 import { colors } from "../styles/styles";
 import { Feather, FontAwesome } from "@expo/vector-icons";
@@ -99,11 +100,18 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={styles.generalContainer}>
+      <StatusBar backgroundColor={colors.BLUE_COLOR} barStyle="light-content"/>
+      <View style={{height: "30%"}}>
+        <Image
+          style={{width: 200, height: 200}}
+          source={require('../../assets/tuvarologo.png')}
+        />
+      </View>
       <View style={styles.formContainer}>
         <Text
           style={[
             styles.textLabel,
-            { fontSize: 18, marginVertical: 50, fontWeight: "bold" },
+            { fontSize: 26, marginVertical: 50 },
           ]}
         >
           TUVARO
@@ -188,13 +196,13 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
     backgroundColor: colors.BLUE_COLOR,
-    marginTop: currentHeight,
+    //marginTop: currentHeight,
     alignItems: "center",
     justifyContent: "flex-end",
   },
   formContainer: {
     width: "100%",
-    height: "75%",
+    height: "60%",
     alignItems: "center",
     backgroundColor: colors.WHITE_COLOR,
     borderTopLeftRadius: 100,
