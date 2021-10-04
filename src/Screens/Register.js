@@ -18,35 +18,93 @@ import { Feather } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
 
 const Register = ({ navigation }) => {
+
   const [emailState, setEmailState] = useState("");
+  const [confirmarEmailState, setConfirmarEmailState] = useState("");
   const [passwordState, setPasswordState] = useState("");
+  const [confirmarPasswordState, setConfirmarPasswordState] = useState("");
+  const [errorInputEmail,setErrorInputEmail] = useState(false);
+  const [errorInputPassword,setErrorInputPassword] = useState(false);
+  const [errorInputConfirmarEmail,setErrorConfirmarInputEmail] = useState(false);
+  const [errorInputConfirmarPassword,setErrorConfirmarInputPassword] = useState(false);
+  const [mensajeErrorEmail,setMensajeErrorEmail] = useState("introduce un correo valido");
+  const [mensajeErrorContraseña,setMensajeErrorContraseña] = useState("la contraseña debe tener mayusculas, minusculas y numeros");
+  const [mensajeErrorConfirmarContraseña,setMensajeErrorConfirmarContraseña] = useState("las contraseñas no coinciden");
 
   const emailRef = useRef("");
+  const confirmarEmailRef = useRef("");
   const passwordRef = useRef("");
+  const confirmarPasswordRef = useRef("");
+  const inputsvalidos = useRef(true);
 
   function onChangeTextEmail(value) {
+    setErrorInputEmail(false);
     setEmailState(value);
     emailRef.current = value;
   }
 
   function onChangeTextPassword(value) {
+    setErrorInputPassword(false);
     setPasswordState(value);
     passwordRef.current = value;
   }
 
+  function onChangeTextConfirmPassword(value) {
+    setErrorConfirmarInputPassword(false);
+    setConfirmarPasswordState(value);
+    confirmarPasswordRef.current = value;
+  }
+
+  function onChangeTextConfirmEmail(value) {
+    setConfirmarEmailState(value);
+    confirmarEmailRef.current = value;
+  }
+
   async function registrarUser() {
     try {
-      console.log();
-      const user = await Auth.signUp({
-        username: emailRef.current,
-        password: passwordRef.current,
-      });
-      console.log("USUARIO ---> ", user);
-      navigation.navigate("ConfirmCode", { email: emailRef.current });
+
+      validarInputs()
+      if(inputsvalidos.current){
+        const user = await Auth.signUp({
+          username: emailRef.current,
+          password: passwordRef.current,
+        });
+        console.log("USUARIO ---> ", user);
+        navigation.navigate("ConfirmCode", { email: emailRef.current });
+      }
+      
     } catch (error) {
       console.log("ERROR AL REGISTRAR USUARIO ---> ", error);
       Alert.alert(error);
     }
+  }
+
+  function validarInputs(){
+
+    if(emailRef.current === ""){
+      inputsvalidos.current = false;
+      setErrorInputEmail(true);
+    }
+
+    else if(passwordRef.current === ""){
+      inputsvalidos.current = false;
+      setErrorInputPassword(true);
+    }
+
+    else if(confirmarPasswordRef.current === ""){
+      inputsvalidos.current = false;
+      setErrorConfirmarInputPassword(true);
+    }
+
+    else if(confirmarPasswordRef.current !== passwordRef.current){
+      inputsvalidos.current = false;
+      setErrorConfirmarInputPassword(true);
+    }
+
+    else{
+      inputsvalidos.current = true;
+    }
+
   }
 
   return (
@@ -76,40 +134,92 @@ const Register = ({ navigation }) => {
         </Text>
       </View>
       <View style={styles.formContainer}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.textLabel}>Usuario</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder={"test@gmail.com"}
-            value={emailState}
-            onChangeText={(val) => {
-              onChangeTextEmail(val);
-            }}
-          />
+        <View style={errorInputEmail ? styles.inputContainerError : styles.inputContainer}>
+          <Text style={styles.textLabel}>Correo</Text>
+          <View style={{width: "90%", flexDirection: "row"}}>
+            <TextInput
+              style={styles.textInput}
+              placeholder={"test@gmail.com"}
+              value={emailState}
+              onChangeText={(val) => {
+                onChangeTextEmail(val);
+              }}
+            />
+            {
+              errorInputEmail ? 
+              <Feather name="alert-circle" size={15} color="red" />
+              : 
+              null
+            }
+          </View>
+          {
+            errorInputEmail ? 
+            <Text style={styles.textLabelError}>{mensajeErrorEmail}</Text>
+            : 
+            null
+          }
         </View>
-        <View style={styles.inputContainer}>
+        {/* <View style={styles.inputContainer}>
           <Text style={styles.textLabel}>Email</Text>
-          <TextInput style={styles.textInput} placeholder={"test@gmail.com"} />
-        </View>
-        <View style={styles.inputContainer}>
+          <TextInput 
+          style={styles.textInput} 
+          placeholder={"test@gmail.com"}
+          value={confirmarEmailState}
+          onChangeText={(val) => {
+            onChangeTextConfirmEmail(val);
+          }}/>
+        </View> */}
+        <View style={errorInputPassword ? styles.inputContainerError : styles.inputContainer}>
           <Text style={styles.textLabel}>Contraseña</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder={"* * * * * * * *"}
-            secureTextEntry={true}
-            value={passwordState}
-            onChangeText={(val) => {
-              onChangeTextPassword(val);
-            }}
-          />
+          <View style={{width: "90%", flexDirection: "row"}}>
+            <TextInput
+              style={styles.textInput}
+              placeholder={"* * * * * * * *"}
+              secureTextEntry={true}
+              value={passwordState}
+              onChangeText={(val) => {
+                onChangeTextPassword(val);
+              }}
+            />
+            {
+              errorInputPassword ? 
+              <Feather name="alert-circle" size={15} color="red" />
+              : 
+              null
+            }
+          </View>
+          {
+            errorInputPassword ? 
+            <Text style={styles.textLabelError}>{mensajeErrorContraseña}</Text>
+            : 
+            null
+          }
         </View>
-        <View style={styles.inputContainer}>
+        <View style={errorInputConfirmarPassword ? styles.inputContainerError : styles.inputContainer}>
           <Text style={styles.textLabel}>Confirmar contraseña</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder={"* * * * * * * *"}
-            secureTextEntry={true}
-          />
+          <View style={{width: "90%", flexDirection: "row"}}>
+            <TextInput
+              style={styles.textInput}
+              placeholder={"* * * * * * * *"}
+              secureTextEntry={true}
+              value={confirmarPasswordState}
+              onChangeText={(val) => {
+                onChangeTextConfirmPassword(val);
+              }}
+            />
+            {
+              errorInputConfirmarPassword ? 
+              <Feather name="alert-circle" size={15} color="red" />
+              : 
+              null
+            }
+          </View>
+          {
+            errorInputConfirmarPassword ? 
+            <Text style={styles.textLabelError}>{mensajeErrorConfirmarContraseña}</Text>
+            : 
+            null
+          }
         </View>
         <TouchableOpacity
           style={styles.btnSignUp}
@@ -168,5 +278,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     marginVertical: 20,
+  },
+  inputContainerError: {
+    width: "80%",
+    marginBottom: 15,
+    backgroundColor: colors.GRAY_1_COLOR,
+    borderRadius: 10,
+    paddingLeft: 10,
+    borderColor: "red",
+    borderWidth: 2
+  },
+  textLabelError: {
+    color: "red",
+    fontSize: 10,
   },
 });
