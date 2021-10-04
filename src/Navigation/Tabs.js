@@ -11,8 +11,8 @@ const Tabs = () => {
     return(
         <Tab.Navigator>
             <Tab.Screen name="Home" component={Home}/>
-            <Tab.Screen name="Report" component={Report}/>
             <Tab.Screen name="NewExpense" component={NewExpense}/>
+            <Tab.Screen name="Report" component={Report}/>
         </Tab.Navigator>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -29,6 +29,12 @@ const Login = ({ navigation }) => {
   const emailRef = useRef("");
   const passwordRef = useRef("");
 
+  useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then(user => {navigation.navigate("HomeTab")})
+      .catch(error => {console.log("ERROR CHECK USER ---> ", error)})
+  }, [])
+
   function onChangeTextEmail(value){
     setErrorInputEmail(false);
     setEmailState(value);
@@ -48,7 +54,7 @@ const Login = ({ navigation }) => {
       console.log("CREDENCIALES ---> ",emailRef.current," ",passwordRef.current);
       if(emailRef.current && passwordRef.current){
         const user = await Auth.signIn(emailRef.current,passwordRef.current);
-        console.log("USUARIO ---> ",user);
+        //console.log("USUARIO ---> ",user);
         navigation.navigate("HomeTab");
       }
       else{
