@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
     backgroundColor: colors.BLUE_COLOR,
-    marginTop: currentHeight,
+    //marginTop: currentHeight,
     alignItems: "center",
     justifyContent: "flex-end",
   },
