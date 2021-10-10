@@ -11,13 +11,14 @@ import {
 } from "react-native";
 import { colors } from "../styles/styles";
 import { Feather, FontAwesome } from "@expo/vector-icons";
+import { connect } from "react-redux";
 
 const { height, width } = Dimensions.get("window");
 const { currentHeight } = StatusBar;
 
 import { Auth } from "aws-amplify";
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation, updateUserID }) => {
 
   const [errorInputEmail,setErrorInputEmail] = useState(false);
   const [erroInputPassword,setErroInputPassword] = useState(false);
@@ -51,10 +52,11 @@ const Login = ({ navigation }) => {
     try {
       setErrorInputEmail(false);
       setErroInputPassword(false);
-      console.log("CREDENCIALES ---> ",emailRef.current," ",passwordRef.current);
+      //console.log("CREDENCIALES ---> ",emailRef.current," ",passwordRef.current);
       if(emailRef.current && passwordRef.current){
         const user = await Auth.signIn(emailRef.current,passwordRef.current);
-        //console.log("USUARIO ---> ",user);
+        console.log("USUARIO ---> ",user.attributes.sub);
+        updateUserID(user.attributes.sub);
         navigation.navigate("HomeTab");
       }
       else{
@@ -194,7 +196,16 @@ const Login = ({ navigation }) => {
   );
 };
 
-export default Login;
+const mapStateToprops = state => state;
+
+const mapDispatchToProps = dispatch => ({
+  updateUserID: userID => dispatch({
+    type: "ACTUALIZAR_USER_ID",
+    payload: userID
+  })
+});
+
+export default connect(mapStateToprops,mapDispatchToProps)(Login);
 
 const styles = StyleSheet.create({
   generalContainer: {

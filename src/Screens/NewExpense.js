@@ -1,15 +1,22 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 
-const NewExpense = () => {
+const NewExpense = ({currentUserID}) => {
     return(
         <View style={styles.generalContainer}>
-            <Text>New expense</Text>
+            <Text>{currentUserID}</Text>
         </View>
     );
 }
 
-export default NewExpense;
+const mapStateToprops = state => ({
+    currentUserID: state.currentUserID
+});
+
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(mapStateToprops,mapDispatchToProps)(NewExpense);
 
 const styles = StyleSheet.create({
     generalContainer: {
