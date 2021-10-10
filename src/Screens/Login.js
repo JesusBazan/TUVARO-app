@@ -32,7 +32,11 @@ const Login = ({ navigation, updateUserID }) => {
 
   useEffect(() => {
     Auth.currentAuthenticatedUser()
-      .then(user => {navigation.navigate("HomeTab")})
+      .then(user => {
+        navigation.navigate("HomeTab")
+        //console.log("USUARIO ---> ",user);
+        updateUserID(user.attributes.sub);
+      })
       .catch(error => {console.log("ERROR CHECK USER ---> ", error)})
   }, [])
 
