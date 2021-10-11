@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 //HOOKS
 import useMovimiento from '../hooks/useMovimiento';
 
-const NewExpense = ({currentUserID}) => {
+const NewExpense = ({currentUserID,actualizarListaDeMovimientos}) => {
 
     const [ crearNuevoMovimiento ] = useMovimiento();
 
@@ -21,6 +21,7 @@ const NewExpense = ({currentUserID}) => {
                     userID: currentUserID
                 }
                 crearNuevoMovimiento(newMovimiento);
+                actualizarListaDeMovimientos();
             }}>
                 <Text>CREAR GASTO O INGRESO</Text>
             </TouchableOpacity>
@@ -32,7 +33,11 @@ const mapStateToprops = state => ({
     currentUserID: state.currentUserID
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    actualizarListaDeMovimientos: () => dispatch({
+        type: "ACTUALIZAR_LISTA_DE_MOVIMIENTOS"
+    })
+});
 
 export default connect(mapStateToprops,mapDispatchToProps)(NewExpense);
 
