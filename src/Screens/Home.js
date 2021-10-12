@@ -38,7 +38,7 @@ const DATA = [
   },
 ];
 
-const Home = ({ currentUserID }) => {
+const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
   const [, recuperarListaDeMovimientos, listaMovimientos] = useMovimiento();
   const [selectedValue, setSelectedValue] = useState("java");
 
