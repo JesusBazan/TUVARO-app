@@ -1,0 +1,8 @@
+type Movimiento @model {
+  id: ID!
+  userID: ID! #ID del usuario
+  tipo: String! #ingreso o gasto
+  categoria: String! # alimento, tranportes, renta, etc
+  Monto: Float! #00.00
+  descripcion: String
+}
