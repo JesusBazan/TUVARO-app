@@ -8,8 +8,8 @@ const reducer = (state = initialState, action) => {
         case "ACTUALIZAR_USER_ID":
             return { ...state, currentUserID: action.payload }
 
-        // case "ACTUALIZAR_LISTA_DE_MOVIMIENTOS":
-        //     return { ...state, refreshGetMovements: !refreshGetMovements }
+        case "ACTUALIZAR_LISTA_DE_MOVIMIENTOS":
+            return { ...state, refreshGetMovements: !state.refreshGetMovements }
     
         default:
             return state;

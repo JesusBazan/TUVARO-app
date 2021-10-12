@@ -27,7 +27,7 @@ const DATA = [
     },
 ];
 
-const Home = ({currentUserID}) => {
+const Home = ({currentUserID,actualizarListaDeMovimientos}) => {
 
     const [,recuperarListaDeMovimientos,listaMovimientos] = useMovimiento();
 
@@ -54,7 +54,7 @@ const Home = ({currentUserID}) => {
 
     useEffect(() => {
         recuperarListaDeMovimientos(currentUserID);
-    }, [currentUserID]);
+    }, [currentUserID,actualizarListaDeMovimientos]);
 
     return(
         <View style={styles.generalContainer}>
@@ -89,7 +89,7 @@ const BlockMovimiento = ({movimiento}) => {
 
 const mapStateToprops = state => ({
     currentUserID: state.currentUserID,
-    //actualizarListaDeMovimientos: state.refreshGetMovements
+    actualizarListaDeMovimientos: state.refreshGetMovements
 });
 
 const mapDispatchToProps = dispatch => ({});
