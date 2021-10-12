@@ -63,9 +63,9 @@ const Home = ({ currentUserID }) => {
     return () => backHandler.remove();
   }, []);
 
-  useEffect(() => {
-    recuperarListaDeMovimientos(currentUserID);
-  }, [currentUserID]);
+    useEffect(() => {
+        recuperarListaDeMovimientos(currentUserID);
+    }, [currentUserID,actualizarListaDeMovimientos]);
 
   return (
     <View style={styles.generalContainer}>
@@ -181,9 +181,9 @@ const BlockMovimiento = ({ movimiento }) => {
   );
 };
 
-const mapStateToprops = (state) => ({
-  currentUserID: state.currentUserID,
-  //actualizarListaDeMovimientos: state.refreshGetMovements
+const mapStateToprops = state => ({
+    currentUserID: state.currentUserID,
+    actualizarListaDeMovimientos: state.refreshGetMovements
 });
 
 const mapDispatchToProps = (dispatch) => ({});
