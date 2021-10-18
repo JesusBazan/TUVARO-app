@@ -41,6 +41,8 @@ const DATA = [
 const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
   const [, recuperarListaDeMovimientos, listaMovimientos] = useMovimiento();
   const [selectedValue, setSelectedValue] = useState("java");
+  const [totalExpenditures, setTotalExpenditures] = useState(0);
+  const [totalRevenues, setTotalRevenues] = useState(0);
 
   useEffect(() => {
     const backAction = () => {
@@ -63,9 +65,52 @@ const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
     return () => backHandler.remove();
   }, []);
 
-    useEffect(() => {
-        recuperarListaDeMovimientos(currentUserID);
-    }, [currentUserID,actualizarListaDeMovimientos]);
+  useEffect(() => {
+    recuperarListaDeMovimientos(currentUserID);
+  }, [currentUserID, actualizarListaDeMovimientos]);
+
+  useEffect(() => {
+    handleCalculateTotal(listaMovimientos);
+  }, [listaMovimientos]);
+
+  const handleCalculateTotal = (transactions) => {
+    /* console.log(
+      "🚀 ~ file: Home.js ~ line 77 ~ handleCalculateTotal ~ transactions",
+      typeof transactions
+    ); */
+    let totalExpenditures = 0;
+    let totalRevenues = 0;
+    if (transactions != undefined) {
+      if (transactions == Object) {
+        const data = transactions.data.listaMovimientos.items;
+        data.forEach((element) => {
+          if (element.Monto > 0) {
+            if (element.tipo == "Gasto") {
+              totalExpenditures = totalExpenditures + element.Monto;
+            }
+            if (element.tipo == "Ingreso") {
+              totalRevenues = totalRevenues + element.Monto;
+            }
+          }
+        });
+      } else {
+        transactions.forEach((element) => {
+          if (element.Monto > 0) {
+            if (element.tipo == "Gasto") {
+              totalExpenditures = totalExpenditures + element.Monto;
+            }
+            if (element.tipo == "Ingreso") {
+              totalRevenues = totalRevenues + element.Monto;
+            }
+          }
+        });
+      }
+    } else {
+      console.log("transactions is undefined");
+    }
+    setTotalExpenditures(totalExpenditures);
+    setTotalRevenues(totalRevenues);
+  };
 
   return (
     <View style={styles.generalContainer}>
@@ -136,7 +181,10 @@ const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
           }}
         >
           <Text style={styles.textLabel}>Ingresos</Text>
-          <Text style={styles.textLabel}>$7,000.00</Text>
+          <Text style={styles.textLabel}>
+            {" "}
+            {"$ " + totalRevenues.toFixed(2)}
+          </Text>
         </View>
         <View
           style={{
@@ -150,7 +198,9 @@ const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
           }}
         >
           <Text style={styles.textLabel}>Gastos</Text>
-          <Text style={styles.textLabel}>$2,000.00</Text>
+          <Text style={styles.textLabel}>
+            {"$ " + totalExpenditures.toFixed(2)}
+          </Text>
         </View>
       </View>
       <FlatList
@@ -163,6 +213,7 @@ const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
             </View>
           );
         }}
+        style={{ width: "90%" }}
       />
     </View>
   );
@@ -172,18 +223,63 @@ const BlockMovimiento = ({ movimiento }) => {
   //console.log("PROPS ---> ",props);
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text>{"monto: " + movimiento.Monto}</Text>
-      <Text>{"categoria: " + movimiento.categoria}</Text>
-      <Text>{"descripcion: " + movimiento.descripcion}</Text>
-      <Text>{"tipo: " + movimiento.tipo}</Text>
+    <View
+      style={{
+        width: "100%",
+        backgroundColor: colors.GRAY_1_COLOR,
+        marginTop: 10,
+        borderRadius: 20,
+      }}
+    >
+      <View
+        style={{
+          width: "100%",
+          backgroundColor: colors.BLUE_COLOR,
+          alignItems: "center",
+        }}
+      >
+        <Text style={[styles.textLabel, { color: colors.WHITE_COLOR }]}>
+          {movimiento.createdAt.substring(0, 10)}
+        </Text>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          marginVertical: 10,
+        }}
+      >
+        <View style={{ width: "70%", paddingLeft: 10 }}>
+          <Text style={styles.textLabel}>
+            {"Descripcion: " + movimiento.descripcion}
+          </Text>
+
+          <Text style={styles.textLabel}>
+            {"Categoria: " + movimiento.categoria}
+          </Text>
+
+          <Text style={styles.textLabel}>{"Tipo: " + movimiento.tipo}</Text>
+        </View>
+
+        <View
+          style={{
+            width: "30%",
+            alignItems: "flex-end",
+            justifyContent: "center",
+            paddingRight: 10,
+          }}
+        >
+          <Text style={styles.textLabel}>
+            {"$ " + movimiento.Monto.toFixed(2)}
+          </Text>
+        </View>
+      </View>
     </View>
   );
 };
 
-const mapStateToprops = state => ({
-    currentUserID: state.currentUserID,
-    actualizarListaDeMovimientos: state.refreshGetMovements
+const mapStateToprops = (state) => ({
+  currentUserID: state.currentUserID,
+  actualizarListaDeMovimientos: state.refreshGetMovements,
 });
 
 const mapDispatchToProps = (dispatch) => ({});
@@ -199,6 +295,7 @@ const styles = StyleSheet.create({
     //marginTop: currentHeight,
     alignItems: "center",
     justifyContent: "flex-end",
+    paddingBottom: 100,
   },
   textLabel: {
     color: colors.BLUE_COLOR,
