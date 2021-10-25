@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -18,9 +18,40 @@ import { Feather } from "@expo/vector-icons";
 //HOOKS
 import useMovimiento from "../hooks/useMovimiento";
 
+const newMovimiento = {
+  Monto: 0,
+  categoria: "",
+  descripcion: "",
+  tipo: "",
+  userID: "",
+};
+
+const Categories = [
+  "Escuela",
+  "Transporte",
+  "Despensa",
+  "Gas",
+  "Cuidados de la salud",
+  "Ropa y calzado",
+  "Cuidados personales",
+];
+
 const NewExpense = ({ currentUserID, actualizarListaDeMovimientos }) => {
   const [crearNuevoMovimiento] = useMovimiento();
-  const [selectedValue, setSelectedValue] = useState("java");
+  //const [selectedValue, setSelectedValue] = useState("java");
+  const [formState, setFormState] = useState(newMovimiento);
+
+  useEffect(() => {
+    setFormState({ ...formState, userID: currentUserID });
+  }, []);
+
+  const setInput = (key, value) => setFormState({ ...formState, [key]: value });
+
+  const addExpense = () => {
+    const todo = { ...formState };
+    crearNuevoMovimiento(todo);
+    actualizarListaDeMovimientos();
+  };
 
   return (
     <View style={styles.generalContainer}>
@@ -52,14 +83,37 @@ const NewExpense = ({ currentUserID, actualizarListaDeMovimientos }) => {
         <View style={styles.inputContainer}>
           <Text style={styles.textLabel}>Categoria</Text>
           <Picker
-            selectedValue={selectedValue}
+            selectedValue={formState.categoria}
             style={{ height: 50, width: "100%" }}
             onValueChange={(itemValue, itemIndex) =>
-              setSelectedValue(itemValue)
+              setFormState({ ...formState, categoria: itemValue })
             }
           >
-            <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="js" />
+            {Categories.map((item, index) => (
+              <Picker.Item label={item} value={item} key={index} />
+            ))}
+          </Picker>
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.textLabel}>Descripción (opcional)</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder={"Prestamo para Jon Doe"}
+            value={formState.descripcion}
+            onChangeText={(value) => setInput("descripcion", value)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.textLabel}>Tipo</Text>
+          <Picker
+            selectedValue={formState.tipo}
+            style={{ height: 50, width: "100%" }}
+            onValueChange={(itemValue, itemIndex) =>
+              setFormState({ ...formState, tipo: itemValue })
+            }
+          >
+            <Picker.Item label="Gasto" value="Gasto" />
+            <Picker.Item label="Ingreso" value="Ingreso" />
           </Picker>
         </View>
         <View style={styles.inputContainer}>
@@ -67,40 +121,17 @@ const NewExpense = ({ currentUserID, actualizarListaDeMovimientos }) => {
           <TextInput
             style={styles.textInput}
             placeholder={"$ 00.00"}
-            //value={passwordState}
+            value={formState.Monto}
+            onChangeText={(value) => setInput("Monto", value)}
             keyboardType="numeric"
           />
         </View>
-        <View style={styles.inputContainer}>
+        {/* <View style={styles.inputContainer}>
           <Text style={styles.textLabel}>Fecha</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder={"19/09/2021"}
-            //value={}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.textLabel}>Descripción (opcional)</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder={"Prestamo para Jon Doe"}
-            //value={}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.btnSignUp}
-          onPress={() => {
-            const newMovimiento = {
-              Monto: 105,
-              categoria: "transporte",
-              descripcion: "pasajes de la semana",
-              tipo: "gasto",
-              userID: currentUserID,
-            };
-            crearNuevoMovimiento(newMovimiento);
-            actualizarListaDeMovimientos();
-          }}
-        >
+          <TextInput style={styles.textInput} placeholder={"19/09/2021"} />
+        </View> */}
+
+        <TouchableOpacity style={styles.btnSignUp} onPress={addExpense}>
           <Text style={[styles.textLabel, { color: colors.WHITE_COLOR }]}>
             Registrar
           </Text>
