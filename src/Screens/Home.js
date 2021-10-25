@@ -12,6 +12,12 @@ import {
 import useMovimiento from "../hooks/useMovimiento";
 import { connect } from "react-redux";
 import { colors } from "../styles/styles";
+
+/* import { applyMiddleware } from "redux";
+var express = require("express");
+var cors = require("cors");
+var app = express(); */
+
 const { height, width } = Dimensions.get("window");
 
 const DATA = [
@@ -43,6 +49,8 @@ const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
   const [selectedValue, setSelectedValue] = useState("java");
   const [totalExpenditures, setTotalExpenditures] = useState(0);
   const [totalRevenues, setTotalRevenues] = useState(0);
+
+  //app.use(cors());
 
   useEffect(() => {
     const backAction = () => {
