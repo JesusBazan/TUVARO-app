@@ -1,6 +1,10 @@
 const initialState = {
     currentUserID: "",
-    refreshGetMovements: false
+    refreshGetMovements: false,
+    listGastos: [],
+    listIngresos: [],
+    ingresosTotal: 0,
+    gastosTotal: 0
 }
 
 const reducer = (state = initialState, action) => {
@@ -10,6 +14,19 @@ const reducer = (state = initialState, action) => {
 
         case "ACTUALIZAR_LISTA_DE_MOVIMIENTOS":
             return { ...state, refreshGetMovements: !state.refreshGetMovements }
+
+        case "LLENAR_LISTA_GASTOS":
+            console.log("lista gastos ---> ",action.listaGastos);
+            return { ...state, listGastos: action.listaGastos}
+
+        case "LLENAR_LISTA_INGRESOS":
+            return { ...state, listIngresos: action.listaIngresos}
+
+        case "ACTUALIZAR_INGRESO_TOTAL":
+            return { ...state, ingresosTotal: action.ingresoTotal}
+
+        case "ACTUALIZAR_GASTOS_TOTAL":
+            return { ...state, gastosTotal: action.gastoTotal}
     
         default:
             return state;

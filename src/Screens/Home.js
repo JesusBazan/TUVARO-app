@@ -44,13 +44,16 @@ const DATA = [
   },
 ];
 
-const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
-  const [, recuperarListaDeMovimientos, listaMovimientos] = useMovimiento();
-  const [selectedValue, setSelectedValue] = useState("java");
+const Home = ({ 
+  currentUserID, 
+  fillListGastos, 
+  fillListIngresos, 
+  actualizarIngresoTotal, 
+  actualizarGastoTotal }) => {
+  const [, recuperarListaDeMovimientos, listaGastos, listaIngresos, listGastos, listIngresos] = useMovimiento();
+  const [selectedValue, setSelectedValue] = useState("Gastos");
   const [totalExpenditures, setTotalExpenditures] = useState(0);
   const [totalRevenues, setTotalRevenues] = useState(0);
-
-  //app.use(cors());
 
   useEffect(() => {
     const backAction = () => {
@@ -74,51 +77,13 @@ const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
   }, []);
 
   useEffect(() => {
-    recuperarListaDeMovimientos(currentUserID);
-  }, [currentUserID, actualizarListaDeMovimientos]);
-
-  useEffect(() => {
-    handleCalculateTotal(listaMovimientos);
-  }, [listaMovimientos]);
-
-  const handleCalculateTotal = (transactions) => {
-    /* console.log(
-      "🚀 ~ file: Home.js ~ line 77 ~ handleCalculateTotal ~ transactions",
-      typeof transactions
-    ); */
-    let totalExpenditures = 0;
-    let totalRevenues = 0;
-    if (transactions != undefined) {
-      if (transactions == Object) {
-        const data = transactions.data.listaMovimientos.items;
-        data.forEach((element) => {
-          if (element.Monto > 0) {
-            if (element.tipo == "Gasto") {
-              totalExpenditures = totalExpenditures + element.Monto;
-            }
-            if (element.tipo == "Ingreso") {
-              totalRevenues = totalRevenues + element.Monto;
-            }
-          }
-        });
-      } else {
-        transactions.forEach((element) => {
-          if (element.Monto > 0) {
-            if (element.tipo == "Gasto") {
-              totalExpenditures = totalExpenditures + element.Monto;
-            }
-            if (element.tipo == "Ingreso") {
-              totalRevenues = totalRevenues + element.Monto;
-            }
-          }
-        });
-      }
-    } else {
-      console.log("transactions is undefined");
+    console.log("useeffect");
+    if(currentUserID !== ""){
+      recuperarListaDeMovimientos(currentUserID);
+      fillListGastos(listaGastos.current);
+      fillListIngresos(listaIngresos.current);
     }
-    setTotalExpenditures(totalExpenditures);
-    setTotalRevenues(totalRevenues);
-  };
+  }, [currentUserID]);// currentUserID, actualizarListaDeMovimientos
 
   return (
     <View style={styles.generalContainer}>
@@ -162,8 +127,8 @@ const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
               setSelectedValue(itemValue)
             }
           >
-            <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="js" />
+            <Picker.Item label="Gastos" value="Gastos" />
+            <Picker.Item label="Ingresos" value="Ingresos" />
           </Picker>
         </View>
       </View>
@@ -213,8 +178,9 @@ const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
       </View>
       <View style={styles.listContainer}>
         <FlatList
-          data={listaMovimientos}
+          data={selectedValue === "Gastos" ? listGastos : selectedValue === "Ingresos" ? listIngresos : null}
           keyExtractor={(item) => item.id}
+          extraData={selectedValue}
           renderItem={(item) => {
             return (
               <View>
@@ -292,7 +258,32 @@ const mapStateToprops = (state) => ({
   actualizarListaDeMovimientos: state.refreshGetMovements,
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  fillListGastos(listaGastos){
+    dispatch({
+      type: "LLENAR_LISTA_GASTOS",
+      listaGastos
+    });
+  },
+  fillListIngresos(listaIngresos){
+    dispatch({
+      type: "LLENAR_LISTA_INGRESOS",
+      listaIngresos
+    });
+  },
+  actualizarIngresoTotal(ingresoTotal){
+    dispatch({
+      type: "ACTUALIZAR_INGRESO_TOTAL",
+      ingresoTotal
+    });
+  },
+  actualizarGastoTotal(gastoTotal){
+    dispatch({
+      type: "ACTUALIZAR_GASTOS_TOTAL",
+      gastoTotal
+    });
+  }
+});
 
 export default connect(mapStateToprops, mapDispatchToProps)(Home);
 

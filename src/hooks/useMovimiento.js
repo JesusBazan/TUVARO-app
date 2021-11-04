@@ -2,7 +2,7 @@
 import {API, graphqlOperation} from 'aws-amplify';
 import { useEffect, useRef, useState } from 'react';
 import {createMovimiento} from '../graphql/myMutations';
-import {listMovimientosByID} from '../graphql/myQueries'
+import {listMovimientosByID} from '../graphql/myQueries';
 
 const DATA = [
     {
@@ -32,15 +32,36 @@ const useMovimiento = () => {
 
     //const listaMovimientos = useRef(DATA);
     const [listaMovimientos, setListaMovimientos] = useState();
+    const [listGastos,setListGastos] = useState();
+    const [listIngresos,setListIngresos] = useState();
+
+    const listaGastos = useRef([]);
+    const listaIngresos = useRef([]);
 
     const recuperarListaDeMovimientos = async(id) => {
         try {
             const data = await API.graphql(graphqlOperation(listMovimientosByID,{id: id}));
-            console.log("LISTA DE MOVES ---> ",data);
+            //console.log("LISTA DE MOVES ---> ",data);
             setListaMovimientos(data.data.listMovimientos.items);
+            filtrarGastosIngresos({
+                listaGeneral: data.data.listMovimientos.items
+            });
         } catch (error) {
             console.log("ERROR AL RECUPERAR LISTA DE MOVIMIENTOS ---> ",error);
         }
+    }
+
+    const filtrarGastosIngresos = ({listaGeneral = []}) => {
+        listaGeneral.map((item) => {
+            if(item.tipo === "Gasto"){
+                listaGastos.current.push(item);
+            }
+            else if(item.tipo === "Ingreso"){
+                listaIngresos.current.push(item);
+            }
+        });
+        setListGastos(listaGastos.current);
+        setListIngresos(listaIngresos.current);
     }
 
     const crearNuevoMovimiento = async(newMovimiento) => {
@@ -55,7 +76,10 @@ const useMovimiento = () => {
     return [ 
         crearNuevoMovimiento,
         recuperarListaDeMovimientos,
-        listaMovimientos
+        listaGastos,
+        listaIngresos,
+        listGastos,
+        listIngresos
     ]
 
 }

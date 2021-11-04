@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Auth } from "aws-amplify";
 import { PieChart } from "react-native-chart-kit";
+import { connect } from "react-redux";
 
 import axios from "axios";
 import { colors } from "../styles/styles";
@@ -23,10 +24,15 @@ const dataChart = [
   { name: 'Moscow', population: 11920000, color: 'rgb(0, 0, 255)', legendFontColor: '#7F7F7F', legendFontSize: 15 }
 ]
 
-const Report = ({ navigation }) => {
+const Report = ({ navigation, listaGastos, listaIngresos }) => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    console.log("LISTA DE GASTOS ---> ",listaGastos);
+    console.log("LISTA DE INGRESOS ---> ",listaIngresos);
+  });
 
   async function signOut() {
     try {
@@ -77,10 +83,6 @@ const Report = ({ navigation }) => {
       });
   }
 
-  useEffect(() => {
-    hanldeFecthLisProductsFromAPI();
-  }, []);
-
   return (
     <View style={styles.generalContainer}>
       <View style={styles.header}>
@@ -108,9 +110,16 @@ const Report = ({ navigation }) => {
       </View>
     </View>
   );
-};
+}
 
-export default Report;
+const mapStateToprops = (state) => ({
+  listaGastos: state.listGastos,
+  listaIngresos: state.listIngresos
+});
+
+const mapDispatchToProps = (dispatch) => ({});
+
+export default connect(mapStateToprops, mapDispatchToProps)(Report);
 
 const styles = StyleSheet.create({
   generalContainer: {
