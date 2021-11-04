@@ -55,29 +55,8 @@ const NewExpense = ({ currentUserID, actualizarListaDeMovimientos }) => {
 
   return (
     <View style={styles.generalContainer}>
-      <View
-        style={{
-          width: "100%",
-          height: "10%",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <Feather
-          name="arrow-left"
-          size={24}
-          color={colors.WHITE_COLOR}
-          style={{ marginLeft: 10 }}
-          //onPress={() => navigation.goBack()}
-        />
-        <Text
-          style={[
-            styles.textLabel,
-            { color: colors.WHITE_COLOR, fontSize: 18, marginLeft: "30%" },
-          ]}
-        >
-          Ingreso
-        </Text>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Nuevo movimiento</Text>
       </View>
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
@@ -156,21 +135,18 @@ export default connect(mapStateToprops, mapDispatchToProps)(NewExpense);
 
 const styles = StyleSheet.create({
   generalContainer: {
-    flex: 1,
-    width: width,
-    height: height,
     backgroundColor: colors.BLUE_COLOR,
-    //marginTop: currentHeight,
+    flex: 1,
     alignItems: "center",
-    justifyContent: "flex-end",
+    width: width,
   },
   formContainer: {
     width: "100%",
-    height: "90%",
+    height: "100%",
     alignItems: "center",
     backgroundColor: colors.WHITE_COLOR,
     borderTopLeftRadius: 100,
-    paddingTop: 100,
+    paddingTop: 50
   },
   inputContainer: {
     width: "80%",
@@ -194,5 +170,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     marginVertical: 20,
+  },
+  header: {
+    padding: 20
+  },
+  headerText: {
+    color: "#fff",
+    fontSize: 18
   },
 });

@@ -211,18 +211,20 @@ const Home = ({ currentUserID, actualizarListaDeMovimientos }) => {
           </Text>
         </View>
       </View>
-      <FlatList
-        data={listaMovimientos}
-        keyExtractor={(item) => item.id}
-        renderItem={(item) => {
-          return (
-            <View>
-              <BlockMovimiento movimiento={item.item} />
-            </View>
-          );
-        }}
-        style={{ width: "90%" }}
-      />
+      <View style={styles.listContainer}>
+        <FlatList
+          data={listaMovimientos}
+          keyExtractor={(item) => item.id}
+          renderItem={(item) => {
+            return (
+              <View>
+                <BlockMovimiento movimiento={item.item} />
+              </View>
+            );
+          }}
+          style={{ width: "100%"}}
+        />
+      </View>
     </View>
   );
 };
@@ -299,14 +301,20 @@ const styles = StyleSheet.create({
     flex: 1,
     width: width,
     height: height,
-    backgroundColor: colors.WHITE_COLOR,
+    backgroundColor: colors.WHITE_COLOR,//colors.WHITE_COLOR
     //marginTop: currentHeight,
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
     paddingBottom: 100,
   },
   textLabel: {
     color: colors.BLUE_COLOR,
     fontSize: 14,
   },
+  listContainer: {
+    backgroundColor: "transparent",
+    width: "100%",
+    height: "82%",
+    padding: 20
+  }
 });

@@ -13,20 +13,25 @@ const Tabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: colors.GREEN_1_COLOR,
-        tabBarInactiveTintColor: colors.GREEN_1_COLOR,
+        tabBarActiveTintColor: colors.WHITE_COLOR,
+        tabBarInactiveTintColor: colors.WHITE_COLOR,
         showIcon: true,
         tabBarShowLabel: false,
         lazyLoad: true,
         tabBarStyle: {
-          backgroundColor: "transparent",
+          padding: 0,
+          backgroundColor: colors.BLUE_COLOR,
           elevation: 0,
           borderTopWidth: 0,
-          position: "absolute",
-          left: 50,
-          right: 50,
-          bottom: 20,
-          height: 100,
+          // borderRadius: 25,
+          //position: "absolute",
+          // left: 50,
+          // right: 50,
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+          bottom: 0,
+          width: "100%",
+          height: "8%"
         },
       }}
     >
@@ -74,6 +79,7 @@ const Tabs = () => {
                 color={color}
               />
             ),
+            headerShown: false,
         }}
       />
     </Tab.Navigator>
