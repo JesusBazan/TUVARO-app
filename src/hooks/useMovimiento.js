@@ -34,9 +34,15 @@ const useMovimiento = () => {
     const [listaMovimientos, setListaMovimientos] = useState();
     const [listGastos,setListGastos] = useState();
     const [listIngresos,setListIngresos] = useState();
+    const [totalIngesoState,setTotalIngresoState] = useState(0);
+    const [totalGastoState,setTotalGastoState] = useState(0);
+    const [totalSaldo,setTotalSaldo] = useState(0);
 
     const listaGastos = useRef([]);
     const listaIngresos = useRef([]);
+    const totalGastos = useRef(0);
+    const totalIngresos = useRef(0);
+    const totalSaldo = useRef(0);
 
     const recuperarListaDeMovimientos = async(id) => {
         try {
@@ -62,6 +68,28 @@ const useMovimiento = () => {
         });
         setListGastos(listaGastos.current);
         setListIngresos(listaIngresos.current);
+        getTotal({
+            listIngresos: listaIngresos.current,
+            listGastos: listaGastos.current
+        });
+
+    }
+
+    const getTotal = ({listIngresos = [], listGastos = []}) => {
+
+        let totalIng = 0.0;
+        listIngresos.map((item) => {
+            totalIng = totalIng + item.Monto
+        })
+        setTotalIngresoState(totalIng);
+
+        let totalGas = 0.0;
+        listGastos.map((item) => {
+            totalGas = totalGas + item.Monto
+        })
+        setTotalGastoState(totalGas);
+
+        setTotalSaldo(totalIng - totalGas);
     }
 
     const crearNuevoMovimiento = async(newMovimiento) => {
@@ -79,7 +107,10 @@ const useMovimiento = () => {
         listaGastos,
         listaIngresos,
         listGastos,
-        listIngresos
+        listIngresos,
+        totalIngesoState,
+        totalGastoState,
+        totalSaldo
     ]
 
 }

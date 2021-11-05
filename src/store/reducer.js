@@ -4,7 +4,8 @@ const initialState = {
     listGastos: [],
     listIngresos: [],
     ingresosTotal: 0,
-    gastosTotal: 0
+    gastosTotal: 0,
+    saldoTotal: 0
 }
 
 const reducer = (state = initialState, action) => {
@@ -27,6 +28,9 @@ const reducer = (state = initialState, action) => {
 
         case "ACTUALIZAR_GASTOS_TOTAL":
             return { ...state, gastosTotal: action.gastoTotal}
+
+        case "ACTUALIZAR_SALDO_TOTAL":
+            return { ...state, saldoTotal: action.saldoTotal}
     
         default:
             return state;

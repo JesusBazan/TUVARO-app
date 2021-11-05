@@ -47,13 +47,32 @@ const DATA = [
 const Home = ({ 
   currentUserID, 
   fillListGastos, 
-  fillListIngresos, 
+  fillListIngresos,
+  actualizarSaldoTotal,
   actualizarIngresoTotal, 
-  actualizarGastoTotal }) => {
-  const [, recuperarListaDeMovimientos, listaGastos, listaIngresos, listGastos, listIngresos] = useMovimiento();
+  actualizarGastoTotal,
+  ingresosTotal,
+  gastosTotal, 
+  saldoTotal, 
+  listGastos, 
+  listIngresos }) => {
+  const [
+    , 
+    recuperarListaDeMovimientos, 
+    listaGastos, 
+    listaIngresos, 
+    , 
+    ,
+    totalIngesoState,
+    totalGastoState,
+    totalSaldo ] = useMovimiento();
+
   const [selectedValue, setSelectedValue] = useState("Gastos");
   const [totalExpenditures, setTotalExpenditures] = useState(0);
   const [totalRevenues, setTotalRevenues] = useState(0);
+  const [totalSaldoState, setTotalSaldoState] = useState(0);
+  const [listExpenditures,setListExpenditures] = useState([]);
+  const [listRevenues,setListRevenues] = useState([]);
 
   useEffect(() => {
     const backAction = () => {
@@ -82,6 +101,9 @@ const Home = ({
       recuperarListaDeMovimientos(currentUserID);
       fillListGastos(listaGastos.current);
       fillListIngresos(listaIngresos.current);
+      actualizarGastoTotal();
+      actualizarIngresoTotal();
+      actualizarSaldoTotal();
     }
   }, [currentUserID]);// currentUserID, actualizarListaDeMovimientos
 
@@ -104,11 +126,11 @@ const Home = ({
             flexDirection: "column",
           }}
         >
-          <Text style={[styles.textLabel, { color: colors.WHITE_COLOR }]}>
+          <Text style={styles.text22Label}>
             Tu saldo actual
           </Text>
-          <Text style={[styles.textLabel, { color: colors.WHITE_COLOR }]}>
-            $5,000.00
+          <Text style={styles.text22Label}>
+            {"$",saldoTotal.toFixed(2)}
           </Text>
         </View>
         <View
@@ -122,7 +144,7 @@ const Home = ({
         >
           <Picker
             selectedValue={selectedValue}
-            style={{ height: 50, width: "100%", color: colors.WHITE_COLOR }}
+            style={{ height: 50, width: "60%", color: colors.WHITE_COLOR }}
             onValueChange={(itemValue, itemIndex) =>
               setSelectedValue(itemValue)
             }
@@ -156,7 +178,7 @@ const Home = ({
           <Text style={styles.textLabel}>Ingresos</Text>
           <Text style={styles.textLabel}>
             {" "}
-            {"$ " + totalRevenues.toFixed(2)}
+            {"$ " + ingresosTotal.toFixed(2)}
           </Text>
         </View>
         <View
@@ -172,7 +194,7 @@ const Home = ({
         >
           <Text style={styles.textLabel}>Gastos</Text>
           <Text style={styles.textLabel}>
-            {"$ " + totalExpenditures.toFixed(2)}
+            {"$ " + gastosTotal.toFixed(2)}
           </Text>
         </View>
       </View>
@@ -256,6 +278,11 @@ const BlockMovimiento = ({ movimiento }) => {
 const mapStateToprops = (state) => ({
   currentUserID: state.currentUserID,
   actualizarListaDeMovimientos: state.refreshGetMovements,
+  ingresosTotal: state.ingresosTotal,
+  gastosTotal: state.gastosTotal,
+  saldoTotal: state.saldoTotal,
+  listGastos: state.listGastos,
+  listIngresos: state.listIngresos
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -282,7 +309,13 @@ const mapDispatchToProps = (dispatch) => ({
       type: "ACTUALIZAR_GASTOS_TOTAL",
       gastoTotal
     });
-  }
+  },
+  actualizarSaldoTotal(saldoTotal){
+    dispatch({
+      type: "ACTUALIZAR_SALDO_TOTAL",
+      saldoTotal
+    });
+  },
 });
 
 export default connect(mapStateToprops, mapDispatchToProps)(Home);
@@ -300,7 +333,11 @@ const styles = StyleSheet.create({
   },
   textLabel: {
     color: colors.BLUE_COLOR,
-    fontSize: 14,
+    fontSize: 16,
+  },
+  text22Label: {
+    color: colors.WHITE_COLOR,
+    fontSize: 22,
   },
   listContainer: {
     backgroundColor: "transparent",
