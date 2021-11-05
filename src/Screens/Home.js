@@ -61,16 +61,14 @@ const Home = ({
     recuperarListaDeMovimientos, 
     listaGastos, 
     listaIngresos, 
-    , 
-    ,
-    totalIngesoState,
+    totalIngesoState, 
     totalGastoState,
-    totalSaldo ] = useMovimiento();
+    totalSaldoState ] = useMovimiento();
 
   const [selectedValue, setSelectedValue] = useState("Gastos");
-  const [totalExpenditures, setTotalExpenditures] = useState(0);
-  const [totalRevenues, setTotalRevenues] = useState(0);
-  const [totalSaldoState, setTotalSaldoState] = useState(0);
+  //const [totalExpenditures, setTotalExpenditures] = useState(0);
+  //const [totalRevenues, setTotalRevenues] = useState(0);
+  //const [totalSaldoState, setTotalSaldoState] = useState(0);
   const [listExpenditures,setListExpenditures] = useState([]);
   const [listRevenues,setListRevenues] = useState([]);
 
@@ -101,9 +99,8 @@ const Home = ({
       recuperarListaDeMovimientos(currentUserID);
       fillListGastos(listaGastos.current);
       fillListIngresos(listaIngresos.current);
-      actualizarGastoTotal();
-      actualizarIngresoTotal();
-      actualizarSaldoTotal();
+
+
     }
   }, [currentUserID]);// currentUserID, actualizarListaDeMovimientos
 
@@ -130,7 +127,7 @@ const Home = ({
             Tu saldo actual
           </Text>
           <Text style={styles.text22Label}>
-            {"$",saldoTotal.toFixed(2)}
+            {"$",totalSaldoState.toFixed(2)}
           </Text>
         </View>
         <View
@@ -178,7 +175,7 @@ const Home = ({
           <Text style={styles.textLabel}>Ingresos</Text>
           <Text style={styles.textLabel}>
             {" "}
-            {"$ " + ingresosTotal.toFixed(2)}
+            {"$ " + totalIngesoState.toFixed(2)}
           </Text>
         </View>
         <View
@@ -194,7 +191,7 @@ const Home = ({
         >
           <Text style={styles.textLabel}>Gastos</Text>
           <Text style={styles.textLabel}>
-            {"$ " + gastosTotal.toFixed(2)}
+            {"$ " + totalGastoState.toFixed(2)}
           </Text>
         </View>
       </View>
