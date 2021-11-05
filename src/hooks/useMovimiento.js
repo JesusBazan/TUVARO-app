@@ -34,9 +34,15 @@ const useMovimiento = () => {
     const [listaMovimientos, setListaMovimientos] = useState();
     const [listGastos,setListGastos] = useState();
     const [listIngresos,setListIngresos] = useState();
+    const [totalIngesoState,setTotalIngresoState] = useState(0);
+    const [totalGastoState,setTotalGastoState] = useState(0);
+    const [totalSaldoState,setTotalSaldoState] = useState(0);
 
     const listaGastos = useRef([]);
     const listaIngresos = useRef([]);
+    const totalGastos = useRef(0);
+    const totalIngresos = useRef(0);
+    const totalSaldo = useRef(0);
 
     const recuperarListaDeMovimientos = async(id) => {
         try {
@@ -62,14 +68,42 @@ const useMovimiento = () => {
         });
         setListGastos(listaGastos.current);
         setListIngresos(listaIngresos.current);
+        getTotal({
+            listIngresos: listaIngresos.current,
+            listGastos: listaGastos.current
+        });
+
+    }
+
+    const getTotal = ({listIngresos = [], listGastos = []}) => {
+
+        let totalIng = 0.0;
+        listIngresos.map((item) => {
+            totalIng = totalIng + item.Monto
+        })
+        setTotalIngresoState(totalIng);
+        totalIngresos.current = totalIng;
+
+        let totalGas = 0.0;
+        listGastos.map((item) => {
+            totalGas = totalGas + item.Monto
+        })
+        setTotalGastoState(totalGas);
+        totalGastos.current = totalGas;
+
+        totalSaldo.current = totalIng - totalGas;
+        setTotalSaldoState(totalIng - totalGas);
     }
 
     const crearNuevoMovimiento = async(newMovimiento) => {
+        let data = null;
         try {
-            const data = await API.graphql(graphqlOperation(createMovimiento, {input: newMovimiento}));
+            data = await API.graphql(graphqlOperation(createMovimiento, {input: newMovimiento}));
             console.log("NUEVO MOVIMIENTO CREADO CON EXITO ---> ",data);
+            return data;
         } catch (error) {
             console.log("ERROR AL CREAR NUEVO MOVIMIENTO ---> ", error);
+            return data;
         }
     }
 
@@ -78,8 +112,9 @@ const useMovimiento = () => {
         recuperarListaDeMovimientos,
         listaGastos,
         listaIngresos,
-        listGastos,
-        listIngresos
+        totalIngesoState,
+        totalGastoState,
+        totalSaldoState
     ]
 
 }
