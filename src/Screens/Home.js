@@ -55,7 +55,8 @@ const Home = ({
   gastosTotal, 
   saldoTotal, 
   listGastos, 
-  listIngresos }) => {
+  listIngresos,
+  actualizarListaDeMovimientos }) => {
   const [
     , 
     recuperarListaDeMovimientos, 
@@ -94,13 +95,10 @@ const Home = ({
   }, []);
 
   useEffect(() => {
-    console.log("useeffect");
     if(currentUserID !== ""){
       recuperarListaDeMovimientos(currentUserID);
       fillListGastos(listaGastos.current);
       fillListIngresos(listaIngresos.current);
-
-
     }
   }, [currentUserID]);// currentUserID, actualizarListaDeMovimientos
 

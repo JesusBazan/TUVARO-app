@@ -93,18 +93,17 @@ const useMovimiento = () => {
 
         totalSaldo.current = totalIng - totalGas;
         setTotalSaldoState(totalIng - totalGas);
-
-        console.log("USEMOV SALDO ---> ",totalSaldo.current);
-        console.log("USEMOV INGRESO ---> ",totalGastos.current);
-        console.log("USEMOV GASTO ---> ",totalIngresos.current);
     }
 
     const crearNuevoMovimiento = async(newMovimiento) => {
+        let data = null;
         try {
-            const data = await API.graphql(graphqlOperation(createMovimiento, {input: newMovimiento}));
+            data = await API.graphql(graphqlOperation(createMovimiento, {input: newMovimiento}));
             console.log("NUEVO MOVIMIENTO CREADO CON EXITO ---> ",data);
+            return data;
         } catch (error) {
             console.log("ERROR AL CREAR NUEVO MOVIMIENTO ---> ", error);
+            return data;
         }
     }
 

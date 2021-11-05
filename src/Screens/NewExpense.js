@@ -4,10 +4,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  StatusBar,
   Dimensions,
   TextInput,
-  Alert,
   Picker,
 } from "react-native";
 import { colors } from "../styles/styles";
@@ -19,7 +17,7 @@ import { Feather } from "@expo/vector-icons";
 import useMovimiento from "../hooks/useMovimiento";
 
 const newMovimiento = {
-  Monto: 0,
+  Monto: "",
   categoria: "",
   descripcion: "",
   tipo: "",
@@ -36,7 +34,7 @@ const Categories = [
   "Cuidados personales",
 ];
 
-const NewExpense = ({ currentUserID, actualizarListaDeMovimientos }) => {
+const NewExpense = ({ currentUserID, actualizarListaDeMovimientos, agregarGasto, agregarIngreso }) => {
   const [crearNuevoMovimiento] = useMovimiento();
   //const [selectedValue, setSelectedValue] = useState("java");
   const [formState, setFormState] = useState(newMovimiento);
@@ -47,9 +45,24 @@ const NewExpense = ({ currentUserID, actualizarListaDeMovimientos }) => {
 
   const setInput = (key, value) => setFormState({ ...formState, [key]: value });
 
-  const addExpense = () => {
-    const todo = { ...formState };
-    crearNuevoMovimiento(todo);
+  const addExpense = async() => {
+    const todo = {
+      Monto: parseFloat(formState.Monto),
+      categoria: formState.categoria,
+      descripcion: formState.descripcion,
+      tipo: formState.tipo,
+      userID: formState.userID,
+    }
+    const newMove = await crearNuevoMovimiento(todo);
+    console.log("NEW MOVE ---> ",newMove.data.createMovimiento);
+
+    if(newMove.data.createMovimiento.tipo === "Gasto"){
+      agregarGasto(newMove.data.createMovimiento);
+    }
+    else if(newMove.data.createMovimiento.tipo === "Ingreso"){
+      agregarIngreso(newMove.data.createMovimiento);
+    }
+
     actualizarListaDeMovimientos();
   };
 
@@ -125,10 +138,23 @@ const mapStateToprops = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  actualizarListaDeMovimientos: () =>
+  actualizarListaDeMovimientos: () => {
     dispatch({
       type: "ACTUALIZAR_LISTA_DE_MOVIMIENTOS",
-    }),
+    })
+  },
+  agregarGasto(newGasto){
+    dispatch({
+      type: "AGREGAR_GASTO",
+      newGasto
+    })
+  },
+  agregarIngreso(newIngreso){
+    dispatch({
+      type: "AGREGAR_INGRESO",
+      newIngreso
+    })
+  }
 });
 
 export default connect(mapStateToprops, mapDispatchToProps)(NewExpense);
