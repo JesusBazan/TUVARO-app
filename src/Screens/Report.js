@@ -9,11 +9,12 @@ import {
   Dimensions,
 } from "react-native";
 import { Auth } from "aws-amplify";
-import { PieChart } from "react-native-chart-kit";
+import { PieChart, ProgressChart } from "react-native-chart-kit";
 import { connect } from "react-redux";
 
 import axios from "axios";
 import { colors } from "../styles/styles";
+import { ScrollView } from "react-native-gesture-handler";
 const { height, width } = Dimensions.get("window");
 
 const dataChart = [
@@ -78,8 +79,8 @@ const Report = ({ navigation, listaGastos, listaIngresos }) => {
     });
     setGastos(array);
     //console.log("LISTA DE INGRESOS ---> ", listaIngresos);
-    let arrayIngresos=[];
-    listaIngresos.map((element)=>{
+    let arrayIngresos = [];
+    listaIngresos.map((element) => {
       let colorObj = getRandomColor();
       let newObj = {
         ...element,
@@ -89,14 +90,13 @@ const Report = ({ navigation, listaGastos, listaIngresos }) => {
         name: element.descripcion || "test",
       };
       arrayIngresos.push(newObj);
-    })
+    });
     setIngresos(arrayIngresos);
   }, []);
 
-
   function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
+    var letters = "0123456789ABCDEF";
+    var color = "#";
     for (var i = 0; i < 6; i++) {
       color += letters[Math.floor(Math.random() * 16)];
     }
@@ -153,49 +153,53 @@ const Report = ({ navigation, listaGastos, listaIngresos }) => {
   }
 
   return (
-    <View style={styles.generalContainer}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Blance</Text>
+    <ScrollView>
+      <View style={styles.generalContainer}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Blance</Text>
+        </View>
+        <View style={styles.containerChart}>
+          <Text style={styles.textTitle}>Gastos</Text>
+          <PieChart
+            data={gastos}
+            width={width}
+            height={220}
+            chartConfig={{
+              backgroundColor: getRandomColor(),
+              backgroundGradientFrom: "#fb8c00",
+              backgroundGradientTo: "#ffa726",
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 5,
+              },
+            }}
+            accessor="Monto"
+            backgroundColor="transparent"
+            //paddingLeft="15"
+          />
+          <Text style={styles.textTitle}>Ingresos</Text>
+          <PieChart
+            data={ingresos}
+            width={width}
+            height={220}
+            chartConfig={{
+              backgroundColor: getRandomColor(),
+              backgroundGradientFrom: "#fb8c00",
+              backgroundGradientTo: "#ffa726",
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 5,
+              },
+            }}
+            accessor="Monto"
+            backgroundColor="transparent"
+            //paddingLeft="15"
+          />
+        </View>
       </View>
-      <View style={styles.containerChart}>
-        <PieChart
-          data={gastos}
-          width={width}
-          height={220/2}
-          chartConfig={{
-            backgroundColor: getRandomColor(),
-            backgroundGradientFrom: "#fb8c00",
-            backgroundGradientTo: "#ffa726",
-            decimalPlaces: 2, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 5,
-            },
-          }}
-          accessor="Monto"
-          backgroundColor="transparent"
-          //paddingLeft="15"
-        />
-        <PieChart
-          data={ingresos}
-          width={width}
-          height={220/2}
-          chartConfig={{
-            backgroundColor: getRandomColor(),
-            backgroundGradientFrom: "#fb8c00",
-            backgroundGradientTo: "#ffa726",
-            decimalPlaces: 2, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 5,
-            },
-          }}
-          accessor="Monto"
-          backgroundColor="transparent"
-          //paddingLeft="15"
-        />
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -231,5 +235,10 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderTopLeftRadius: 100,
+  },
+  textTitle: {
+    color: colors.BLUE_COLOR,
+    fontSize: 18,
+    textAlign: "center",
   },
 });

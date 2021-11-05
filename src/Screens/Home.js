@@ -215,7 +215,7 @@ const BlockMovimiento = ({ movimiento }) => {
         }}
       >
         <Text style={[styles.textLabel, { color: colors.WHITE_COLOR }]}>
-          {movimiento.createdAt.substring(0, 10)}
+          {movimiento.createdAt}
         </Text>
       </View>
       <View
