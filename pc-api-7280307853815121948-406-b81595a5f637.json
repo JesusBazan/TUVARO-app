@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "pc-api-7280307853815121948-406",
+  "private_key_id": "b81595a5f6372f2748f48b8ff4b7a7f4e3a7a145",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCtRZyvGJ8jWXXG\nMxiUzhjL4ZPse0jnZv8BEveDemfC8PpJWe3fo8hz04AAViRwFiOoLjBDE3nCMuql\nrsY53b0bB/0MswbZtu2pEDfxtgjuU9S0kWMLIolfjI56f6nkBhRqfosGngm+hsSk\noLnB9AmGCWMat+XsefrcN6zZOzRLVbv3oQxEMsEJc30oz0Bwu7x/wUWHhmx5OxTb\nKVF493EdJU2P3MOKlGbOU8Hh7d9UhpoiXxNfQ2e/d7N7qdea60mXi4JLFKTSwlZP\nhH6+UW9vAy4O0Osv3hd7ahAdQp+Ppt/EuSFp4cjsqg3raP5pwts/Ed3r/NNhrL4n\nl1a/cwbfAgMBAAECggEAGvHx2TrTeIxPZ9iHUJCyQ3ZbahGL90xJiJG6Auy0mRif\nW2vMNZSDNhvkUmkS9olC10MDh1LOgvgnDEffFJ2abEs0O1bV0GKFl95pTMHZprJL\nqB7Zz5/5y+2QNJWIxmh5oUv3c7p82m+bwdwqtvIrzvfDvSJu83TOoZNY4lk2GybC\nuZSrKx5U+DLm99+KiGja2tvW8FVnaVXNvkxSrYAZKT01w3Uy70hNN/NlotS3x4ht\n18TUAlQ09v58xOC/UbHZhQw5CfXpxD2TSkhg7TBhPmzCVV74oHIQkInrr8jUFGic\neMtiycBpVlMHBYFpsvwK/wQL+xAxmy780UxhUjTWnQKBgQDlrygZzmmZzbHaMJJM\nRZOXWiYxSnXwg+MPzVbsAy1pz/chgF22QeF476BikIvZs0+jiyx8LBNItzK/hMcX\npPQTuf4fLWupCbKJMcocd+5LbqV0oDTJey4kRV0zbNChzAJBicg6xhlNlafQbEHs\nSrEnLMy099TaC+D6w1QPM/dERQKBgQDBH9UnEIf62PELYeAt4XKxCqkpz7aAfIDs\njEGsiecMp+nPjkKX3aYEm9svCJRIQ5qGgToOeTOhaENAN2dFyJi4Usn8CRn2hOSO\n4y8eeiZXg0YH2ajHdJdolujMUa7/AG0YeV2AMEf1VjiNIrQyU5MEL9WIBrosuBWJ\nos3YZCfa0wKBgCLURs5zAIx0Jq4hg23RdyoSX4xF8FCCj2IMD0xGxxIumRkZcBx9\nLQW7wKRxquNeT4tLRXmm7V2veiCUr+Qj/WcoYyKzLoo5kDtBs5ZRkW8a3jgrOxX6\neerCIfn0XEbMuuLZU+WluJyNPx9Z6z07rlV0c65Vjo9qEbm0+QA9LxfJAoGBAIRd\nQwSxSeHeCufYP4Ryvt8lBWiI2vcZXmvCfci6A8gi1hfR00avPfhusj18TdVxsFl7\n/MSqwX5hLaa30mp74GCFLbc2rbrOvrBIeaUT52+Xo8oBnrKF8LhYplpTqfNQ4XUi\nybjwXoGChOQG4yaTLXJzLpE6uyOnT+uz0A3+J2rNAoGBAKBt5V5ZRWO6X6oqgGlb\nEGkcWZzmO6AtslVsXdqh73DWCEGbeJuQVvoQ5K1/5/ZV6dUSmoOd3wBJW7vY3bC9\nJCQIGlPTiXBCDeauLqoD+yGkhP50xP3OgpRV6J+5L6DF+mNuqqlyFymZz0EAApz1\nxkZLwM76BIfdNX1A9E8fql/W\n-----END PRIVATE KEY-----\n",
+  "client_email": "tuvaro-service-account@pc-api-7280307853815121948-406.iam.gserviceaccount.com",
+  "client_id": "107361399490853331553",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/tuvaro-service-account%40pc-api-7280307853815121948-406.iam.gserviceaccount.com"
+}
